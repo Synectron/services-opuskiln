@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Outfit", "Hind", "Segoe UI", sans-serif;
+  --color-paper: #f6efe4;
+  --color-ink: #23170f;
+  --color-maroon: #8e1c2c;
+  --color-veg: #0f7a3c;
+  --color-gold: #8a5a16;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  background: #f3eadc;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(255, 252, 247, 0.95), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 100% 0%, rgba(230, 194, 122, 0.32), transparent 48%),
+    radial-gradient(ellipse 50% 40% at 80% 110%, rgba(142, 28, 44, 0.06), transparent 50%);
+}
+
+html.lang-hi body {
+  font-family: "Hind", var(--font-sans);
+}
+
+::selection {
+  background: #e6c27a;
+  color: #23170f;
+}
+
+:focus-visible {
+  outline: 2px solid #8e1c2c;
+  outline-offset: 3px;
+}
+
+.veg-mark {
+  display: inline-grid;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  place-items: center;
+  border: 1.5px solid #0f7a3c;
+  border-radius: 2px;
+  background: #fff;
+}
+
+.veg-mark > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #0f7a3c;
+}
+
+.btn {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.65rem 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-wa {
+  background: #0f7a3c;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(15, 122, 60, 0.22);
+}
+
+.btn-wa:hover {
+  background: #0c6833;
+}
+
+.btn-call {
+  background: #8e1c2c;
+  color: #fffaf3;
+}
+
+.btn-call:hover {
+  background: #751625;
+}
+
+.btn-zomato,
+.btn-swiggy {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(35, 23, 15, 0.12);
+}
+
+.btn-zomato {
+  color: #e23744;
+}
+
+.btn-swiggy {
+  color: #e46d12;
+}
+
+.stamp {
+  display: grid;
+  width: 4.6rem;
+  height: 4.6rem;
+  place-items: center;
+  border-radius: 999px;
+  border: 1.5px dashed #e6c27a;
+  background: rgba(142, 28, 44, 0.94);
+  color: #fffaf3;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  rotate: -8deg;
+}
+
+dialog.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  height: min(92dvh, 860px);
+  max-height: min(92dvh, 860px);
+  margin: auto 0 0;
+  padding: 0;
+  overflow: hidden;
+  color: #23170f;
+  background: #fffaf3;
+  border: 0;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -20px 50px rgba(36, 23, 15, 0.22);
+}
+
+dialog.sheet::backdrop {
+  background: rgba(28, 18, 12, 0.5);
+}
+
+dialog.sheet[open] {
+  animation: sheet-in 0.32s ease;
+}
+
+@media (min-width: 768px) {
+  dialog.sheet {
+    width: min(440px, 100vw);
+    max-width: 440px;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0 0 0 auto;
+    border-radius: 0;
+    animation-name: sheet-side;
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.cart-pop {
+  animation: pop 0.35s ease;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(18px);
+    opacity: 0.6;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-side {
+  from {
+    transform: translateX(24px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .reveal.is-in,
+  .cart-pop,
+  dialog.sheet[open] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn:active {
+    transform: none;
+  }
+}
