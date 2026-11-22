@@ -91,11 +91,18 @@ Production URLs:
    npx wrangler pages secret put GOOGLE_PLACE_ID
    ```
 
-5. Deploy:
+5. Deploy (manual):
 
    ```bash
    npm run cf:deploy
    ```
+
+   **Deploy on push:** pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) (test → build → Cloudflare Pages). GitHub repo secrets required:
+
+   | Secret                  | Value                                                                                                         |
+   | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+   | `CLOUDFLARE_ACCOUNT_ID` | `0d7c9361a2629998ff616669f22be334`                                                                            |
+   | `CLOUDFLARE_API_TOKEN`  | [API token](https://dash.cloudflare.com/profile/api-tokens) with **Edit Cloudflare Workers** (includes Pages) |
 
 6. Custom domain `rkn-punjabi-soya-chaap.services.opuskiln.com` is attached to the Pages project. At your DNS host (currently Hostinger for `opuskiln.com`), add:
 
