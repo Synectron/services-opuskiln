@@ -1,20 +1,24 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { SITE } from "../data/site.ts";
 import { findItem, itemName, portionName } from "../data/menu.ts";
-import { buildWhatsAppText, deliveryGap, inr, lineCost, whatsAppUrl } from "../lib/order.ts";
+import { buildWhatsAppText, deliveryGap, inr, lineCost, whatsAppUrl, type SharedLocation } from "../lib/order.ts";
 import { useStore } from "../store.tsx";
 import { ChatIcon } from "./Icons.tsx";
+import { LocationShare } from "./LocationShare.tsx";
 
 export function CartSheet() {
   const { t, lang, cart, total, cartOpen, setCartOpen, setQty, setLinePortion, remove, clear } = useStore();
   const ref = useRef<HTMLDialogElement>(null);
   const nameId = useId();
   const addressId = useId();
+  const landmarkId = useId();
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [landmark, setLandmark] = useState("");
+  const [location, setLocation] = useState<SharedLocation | null>(null);
   const gap = deliveryGap(total);
   const pct = Math.min(100, Math.round((total / SITE.freeDelivery) * 100));
-  const message = buildWhatsAppText({ lang, lines: cart, name, address });
+  const message = buildWhatsAppText({ lang, lines: cart, name, address, landmark, location });
 
   useEffect(() => {
     const dialog = ref.current;
@@ -122,34 +126,11 @@ export function CartSheet() {
                   );
                 })}
               </ul>
-              <button type="button" onClick={clear} className="mt-2 mb-4 text-sm font-semibold text-[#6e5b4c] underline">
+              <button type="button" onClick={clear} className="mt-2 text-sm font-semibold text-[#6e5b4c] underline">
                 {t.clearCart}
               </button>
-            </div>
-
-            <form
-              className="border-t border-[#eadfce] bg-[#fffaf3] px-4 pt-3 pb-[max(0.85rem,env(safe-area-inset-bottom))]"
-              onSubmit={(event) => event.preventDefault()}
-            >
-              <div className="mb-3">
-                <div className="mb-1 flex items-center justify-between text-xs font-semibold">
-                  <span className={gap === 0 ? "text-veg" : "text-[#6e5b4c]"}>
-                    {gap === 0 ? t.deliveryUnlocked : t.deliveryNeed(inr(gap))}
-                  </span>
-                  <span className="tabular-nums text-[#6e5b4c]">{inr(SITE.freeDelivery)}</span>
-                </div>
-                <div
-                  className="h-2 overflow-hidden rounded-full bg-[#eadfce]"
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={pct}
-                  aria-label={gap === 0 ? t.deliveryUnlocked : t.deliveryNeed(inr(gap))}
-                >
-                  <div className="h-full rounded-full bg-veg transition-[width] duration-500" style={{ width: `${pct}%` }} />
-                </div>
-              </div>
-              <div className="grid gap-2">
+              <div className="mt-4 grid gap-3 pb-4">
+                <LocationShare t={t} location={location} onChange={setLocation} />
                 <label className="grid gap-1 text-sm font-semibold" htmlFor={nameId}>
                   {t.name}
                   <input
@@ -175,8 +156,43 @@ export function CartSheet() {
                     className="rounded-xl bg-white px-3 py-2 text-base font-medium ring-1 ring-[#e4d5c0] outline-none focus-visible:ring-2 focus-visible:ring-maroon"
                   />
                 </label>
+                <label className="grid gap-1 text-sm font-semibold" htmlFor={landmarkId}>
+                  {t.landmark}
+                  <input
+                    id={landmarkId}
+                    name="landmark"
+                    value={landmark}
+                    onChange={(event) => setLandmark(event.target.value)}
+                    placeholder={t.landmarkPh}
+                    className="h-12 rounded-xl bg-white px-3 text-base font-medium ring-1 ring-[#e4d5c0] outline-none focus-visible:ring-2 focus-visible:ring-maroon"
+                  />
+                </label>
               </div>
-              <p className="mt-3 flex items-center justify-between text-base font-semibold" aria-live="polite">
+            </div>
+
+            <form
+              className="border-t border-[#eadfce] bg-[#fffaf3] px-4 pt-3 pb-[max(0.85rem,env(safe-area-inset-bottom))]"
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <div className="mb-3">
+                <div className="mb-1 flex items-center justify-between text-xs font-semibold">
+                  <span className={gap === 0 ? "text-veg" : "text-[#6e5b4c]"}>
+                    {gap === 0 ? t.deliveryUnlocked : t.deliveryNeed(inr(gap))}
+                  </span>
+                  <span className="tabular-nums text-[#6e5b4c]">{inr(SITE.freeDelivery)}</span>
+                </div>
+                <div
+                  className="h-2 overflow-hidden rounded-full bg-[#eadfce]"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={pct}
+                  aria-label={gap === 0 ? t.deliveryUnlocked : t.deliveryNeed(inr(gap))}
+                >
+                  <div className="h-full rounded-full bg-veg transition-[width] duration-500" style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+              <p className="flex items-center justify-between text-base font-semibold" aria-live="polite">
                 <span>{t.total}</span>
                 <span className="tabular-nums">{inr(total)}</span>
               </p>

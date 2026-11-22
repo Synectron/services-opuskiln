@@ -186,6 +186,16 @@ dialog.sheet[open] {
   animation: pop 0.35s ease;
 }
 
+.loc-spin {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 250, 243, 0.35);
+  border-top-color: #fffaf3;
+  animation: loc-spin 0.7s linear infinite;
+}
+
 @keyframes sheet-in {
   from {
     transform: translateY(18px);
@@ -203,6 +213,12 @@ dialog.sheet[open] {
   }
   to {
     transform: none;
+  }
+}
+
+@keyframes loc-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -226,6 +242,7 @@ dialog.sheet[open] {
   .reveal,
   .reveal.is-in,
   .cart-pop,
+  .loc-spin,
   dialog.sheet[open] {
     animation: none;
     opacity: 1;

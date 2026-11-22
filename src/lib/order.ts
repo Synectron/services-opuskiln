@@ -16,6 +16,29 @@ export type CartLine = {
   qty: number;
 };
 
+export type SharedLocation = {
+  lat: number;
+  lng: number;
+  accuracy: number;
+};
+
+export function formatCoord(value: number): string {
+  return value.toFixed(6);
+}
+
+export function accuracyMeters(accuracy: number): number {
+  if (!Number.isFinite(accuracy) || accuracy <= 0) return 1;
+  return Math.max(1, Math.round(accuracy));
+}
+
+export function mapsLink(lat: number, lng: number): string {
+  return `https://maps.google.com/?q=${formatCoord(lat)},${formatCoord(lng)}`;
+}
+
+export function mapsEmbedSrc(lat: number, lng: number): string {
+  return `https://maps.google.com/maps?q=${formatCoord(lat)},${formatCoord(lng)}&z=17&output=embed`;
+}
+
 export function inr(amount: number): string {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
@@ -45,6 +68,8 @@ export function buildWhatsAppText(input: {
   lines: CartLine[];
   name: string;
   address: string;
+  landmark?: string;
+  location?: SharedLocation | null;
 }): string {
   const hi = input.lang === "hi";
   const rows = input.lines.map((line, index) => {
@@ -65,6 +90,18 @@ export function buildWhatsAppText(input: {
         : `Free home delivery is on orders of ₹250+. This order is ₹${gap} short.`;
   const who = input.name.trim().slice(0, 80) || "—";
   const where = input.address.trim().slice(0, 240) || "—";
+  const landmark = input.landmark?.trim().slice(0, 160) ?? "";
+  const location = input.location;
+  const placeLines = [
+    hi ? `नाम: ${who}` : `Name: ${who}`,
+    hi ? `पता: ${where}` : `Address: ${where}`,
+  ];
+  if (landmark) placeLines.push(hi ? `लैंडमार्क: ${landmark}` : `Landmark: ${landmark}`);
+  if (location) {
+    const meters = accuracyMeters(location.accuracy);
+    placeLines.push(hi ? `लोकेशन: ${mapsLink(location.lat, location.lng)}` : `Location: ${mapsLink(location.lat, location.lng)}`);
+    placeLines.push(hi ? `सटीकता: ${meters} मीटर` : `Accuracy: ${meters} m`);
+  }
   return [
     hi ? "नमस्ते RKN Punjabi Soya Chaap," : "Hello RKN Punjabi Soya Chaap,",
     hi ? "मुझे यह ऑर्डर चाहिए:" : "I would like to order:",
@@ -74,8 +111,7 @@ export function buildWhatsAppText(input: {
     hi ? `*कुल: ${inr(total)}*` : `*Total: ${inr(total)}*`,
     delivery,
     "",
-    hi ? `नाम: ${who}` : `Name: ${who}`,
-    hi ? `पता: ${where}` : `Address: ${where}`,
+    ...placeLines,
     "",
     hi ? "कृपया उपलब्धता और समय कन्फर्म करें। धन्यवाद।" : "Please confirm availability and timing. Thank you.",
   ].join("\n");

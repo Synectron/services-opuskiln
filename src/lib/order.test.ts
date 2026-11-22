@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { MENU, findItem, unitPrice } from "../data/menu.ts";
 import { SITE } from "../data/site.ts";
-import { buildWhatsAppText, deliveryGap, orderTotal, whatsAppUrl, type CartLine } from "./order.ts";
+import { accuracyMeters, buildWhatsAppText, deliveryGap, mapsLink, orderTotal, whatsAppUrl, type CartLine } from "./order.ts";
 
 test("the printed card is complete and uniquely priced", () => {
   assert.equal(MENU.length, 40);
@@ -82,4 +82,35 @@ test("cart total, delivery gap, and WhatsApp message", () => {
   assert.match(hindi, /नाम: —/);
   assert.match(hindi, /पता: —/);
   assert.match(hindi, /₹210 और जोड़ें/);
+  assert.equal(hindi.includes("maps.google.com"), false);
+});
+
+test("WhatsApp message includes an optional exact location", () => {
+  const text = buildWhatsAppText({
+    lang: "en",
+    lines: [{ id: "soya-chaap", portion: "half", qty: 1 }],
+    name: "Anita",
+    address: "House 12, Naini",
+    landmark: "Blue gate",
+    location: { lat: 25.399009, lng: 81.873037, accuracy: 17.4 },
+  });
+  const link = mapsLink(25.399009, 81.873037);
+  assert.equal(link, "https://maps.google.com/?q=25.399009,81.873037");
+  assert.equal(accuracyMeters(17.4), 17);
+  assert.match(text, /Landmark: Blue gate/);
+  assert.match(text, new RegExp(`Location: ${link.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+  assert.match(text, /Accuracy: 17 m/);
+  assert.match(decodeURIComponent(whatsAppUrl(text)), /https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/);
+
+  const hindi = buildWhatsAppText({
+    lang: "hi",
+    lines: [{ id: "soya-chaap", portion: "half", qty: 1 }],
+    name: "अनीता",
+    address: "मकान 12",
+    landmark: "नीला गेट",
+    location: { lat: 25.399009, lng: 81.873037, accuracy: 8 },
+  });
+  assert.match(hindi, /लैंडमार्क: नीला गेट/);
+  assert.match(hindi, /लोकेशन: https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/);
+  assert.match(hindi, /सटीकता: 8 मीटर/);
 });
