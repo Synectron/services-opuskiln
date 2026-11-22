@@ -56,12 +56,39 @@ export function orderCount(lines: CartLine[]): number {
   return lines.reduce((sum, line) => sum + line.qty, 0);
 }
 
-export function deliveryGap(total: number, threshold = getSite().freeDelivery): number {
+export function deliveryGap(
+  total: number,
+  threshold = getSite().freeDelivery,
+): number {
   return Math.max(0, threshold - total);
 }
 
 export function portionForAdd(id: string, size: SizeChoice): CartPortion {
   return activePortion(findItem(id), size);
+}
+
+/** Order timestamp in Asia/Kolkata for WhatsApp messages. */
+export function formatOrderStamp(
+  when: Date = new Date(),
+  lang: Lang = "en",
+): string {
+  const date = new Intl.DateTimeFormat(lang === "hi" ? "hi-IN" : "en-IN", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(when);
+  const time = new Intl.DateTimeFormat(lang === "hi" ? "hi-IN" : "en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(when);
+  return lang === "hi"
+    ? `तारीख: ${date} · समय: ${time} IST`
+    : `Date: ${date} · Time: ${time} IST`;
 }
 
 export function buildWhatsAppText(input: {
@@ -71,9 +98,11 @@ export function buildWhatsAppText(input: {
   address: string;
   landmark?: string;
   location?: SharedLocation | null;
+  orderedAt?: Date;
 }): string {
   const hi = input.lang === "hi";
   const threshold = getSite().freeDelivery;
+  const stamp = formatOrderStamp(input.orderedAt ?? new Date(), input.lang);
   const rows = input.lines.map((line, index) => {
     const item = findItem(line.id);
     const title = itemName(item, input.lang);
@@ -98,14 +127,20 @@ export function buildWhatsAppText(input: {
     hi ? `नाम: ${who}` : `Name: ${who}`,
     hi ? `पता: ${where}` : `Address: ${where}`,
   ];
-  if (landmark) placeLines.push(hi ? `लैंडमार्क: ${landmark}` : `Landmark: ${landmark}`);
+  if (landmark)
+    placeLines.push(hi ? `लैंडमार्क: ${landmark}` : `Landmark: ${landmark}`);
   if (location) {
     const meters = accuracyMeters(location.accuracy);
-    placeLines.push(hi ? `लोकेशन: ${mapsLink(location.lat, location.lng)}` : `Location: ${mapsLink(location.lat, location.lng)}`);
+    placeLines.push(
+      hi
+        ? `लोकेशन: ${mapsLink(location.lat, location.lng)}`
+        : `Location: ${mapsLink(location.lat, location.lng)}`,
+    );
     placeLines.push(hi ? `सटीकता: ${meters} मीटर` : `Accuracy: ${meters} m`);
   }
   return [
     hi ? "नमस्ते RKN Punjabi Soya Chaap," : "Hello RKN Punjabi Soya Chaap,",
+    stamp,
     hi ? "मुझे यह ऑर्डर चाहिए:" : "I would like to order:",
     "",
     ...rows,
@@ -115,11 +150,16 @@ export function buildWhatsAppText(input: {
     "",
     ...placeLines,
     "",
-    hi ? "कृपया उपलब्धता और समय कन्फर्म करें। धन्यवाद।" : "Please confirm availability and timing. Thank you.",
+    hi
+      ? "कृपया उपलब्धता और समय कन्फर्म करें। धन्यवाद।"
+      : "Please confirm availability and timing. Thank you.",
   ].join("\n");
 }
 
-export function whatsAppUrl(text: string, whatsapp = getSite().whatsapp || DEFAULT_SITE.whatsapp): string {
+export function whatsAppUrl(
+  text: string,
+  whatsapp = getSite().whatsapp || DEFAULT_SITE.whatsapp,
+): string {
   return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
@@ -127,8 +167,14 @@ export function isCartLine(value: unknown): value is CartLine {
   if (!value || typeof value !== "object") return false;
   const line = value as Partial<CartLine>;
   if (typeof line.id !== "string" || typeof line.qty !== "number") return false;
-  if (line.portion !== "half" && line.portion !== "full" && line.portion !== "single") return false;
-  if (!Number.isInteger(line.qty) || line.qty < 1 || line.qty > 30) return false;
+  if (
+    line.portion !== "half" &&
+    line.portion !== "full" &&
+    line.portion !== "single"
+  )
+    return false;
+  if (!Number.isInteger(line.qty) || line.qty < 1 || line.qty > 30)
+    return false;
   const item = findItemSafe(line.id);
   if (!item) return false;
   if (item.full == null && line.portion !== "single") return false;

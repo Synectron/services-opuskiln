@@ -2,7 +2,15 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { MENU, findItem, unitPrice } from "../data/menu.ts";
 import { SITE } from "../data/site.ts";
-import { accuracyMeters, buildWhatsAppText, deliveryGap, mapsLink, orderTotal, whatsAppUrl, type CartLine } from "./order.ts";
+import {
+  accuracyMeters,
+  buildWhatsAppText,
+  deliveryGap,
+  mapsLink,
+  orderTotal,
+  whatsAppUrl,
+  type CartLine,
+} from "./order.ts";
 
 test("the printed card is complete and uniquely priced", () => {
   assert.equal(MENU.length, 40);
@@ -59,7 +67,9 @@ test("cart total, delivery gap, and WhatsApp message", () => {
     lines,
     name: "Anita",
     address: "House 12, Naini",
+    orderedAt: new Date("2026-11-22T12:05:09+05:30"),
   });
+  assert.match(text, /Date: .*2026.* · Time: .* IST/);
   assert.match(text, /Malai Soya Chaap \(Full\) × 2 — ₹360/);
   assert.match(text, /Veg Steam Momos \(6 pc\) × 1 — ₹20/);
   assert.match(text, /\*Total: ₹380\*/);
@@ -77,7 +87,9 @@ test("cart total, delivery gap, and WhatsApp message", () => {
     lines: [{ id: "tikki-burger", portion: "single", qty: 1 }],
     name: "",
     address: "",
+    orderedAt: new Date("2026-11-22T12:05:09+05:30"),
   });
+  assert.match(hindi, /तारीख: .* · समय: .* IST/);
   assert.match(hindi, /टिक्की बर्गर \(एक प्लेट\) × 1 — ₹40/);
   assert.match(hindi, /नाम: —/);
   assert.match(hindi, /पता: —/);
@@ -98,9 +110,15 @@ test("WhatsApp message includes an optional exact location", () => {
   assert.equal(link, "https://maps.google.com/?q=25.399009,81.873037");
   assert.equal(accuracyMeters(17.4), 17);
   assert.match(text, /Landmark: Blue gate/);
-  assert.match(text, new RegExp(`Location: ${link.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+  assert.match(
+    text,
+    new RegExp(`Location: ${link.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+  );
   assert.match(text, /Accuracy: 17 m/);
-  assert.match(decodeURIComponent(whatsAppUrl(text)), /https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/);
+  assert.match(
+    decodeURIComponent(whatsAppUrl(text)),
+    /https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/,
+  );
 
   const hindi = buildWhatsAppText({
     lang: "hi",
@@ -111,6 +129,9 @@ test("WhatsApp message includes an optional exact location", () => {
     location: { lat: 25.399009, lng: 81.873037, accuracy: 8 },
   });
   assert.match(hindi, /लैंडमार्क: नीला गेट/);
-  assert.match(hindi, /लोकेशन: https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/);
+  assert.match(
+    hindi,
+    /लोकेशन: https:\/\/maps\.google\.com\/\?q=25\.399009,81\.873037/,
+  );
   assert.match(hindi, /सटीकता: 8 मीटर/);
 });

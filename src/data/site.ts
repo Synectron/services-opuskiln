@@ -45,9 +45,9 @@ export const DEFAULT_SITE: ShopSettings = {
   region: "Uttar Pradesh",
   postalCode: "211008",
   mapQuery:
-    "Shani Mandir Chauraha, In Front of Ranjeet Pandit Inter College, Naini, Prayagraj",
-  lat: 25.399009,
-  lng: 81.873037,
+    "Pure Veg RKN Punjabi Soya Chaap, Shani Mandir Chauraha, Naini, Prayagraj",
+  lat: 25.3990085,
+  lng: 81.8730367,
   hoursEn: "Open daily, 10 am – 11 pm",
   hoursHi: "रोज़ खुला, सुबह 10 से रात 11 बजे तक",
   opens: "10:00",
@@ -63,12 +63,23 @@ export const DEFAULT_SITE: ShopSettings = {
 /** @deprecated Prefer getSite() from runtime — kept for tests and seed. */
 export const SITE = DEFAULT_SITE;
 
+/**
+ * Official Google Maps listing:
+ * Pure Veg RKN Punjabi Soya Chaap
+ * https://maps.app.goo.gl/WcEaZnDy5wM2RRCK8
+ * place 0x39854b84620db801:0xfa16478572a97c2f (cid 18020669597449550895)
+ */
+export const GOOGLE_MAPS_PLACE_URL =
+  "https://maps.app.goo.gl/WcEaZnDy5wM2RRCK8";
+export const GOOGLE_MAPS_CID = "18020669597449550895";
+
 export function mapEmbedSrcFor(settings: ShopSettings): string {
-  return `https://maps.google.com/maps?q=${encodeURIComponent(settings.mapQuery)}&z=16&output=embed`;
+  // Embed the Google Business pin (name + marker), not a bare lat/lng drop.
+  return `https://maps.google.com/maps?cid=${GOOGLE_MAPS_CID}&ll=${settings.lat},${settings.lng}&z=17&output=embed`;
 }
 
-export function directionsHrefFor(settings: ShopSettings): string {
-  return `https://maps.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.mapQuery)}`;
+export function directionsHrefFor(_settings: ShopSettings): string {
+  return GOOGLE_MAPS_PLACE_URL;
 }
 
 export const mapEmbedSrc = mapEmbedSrcFor(DEFAULT_SITE);

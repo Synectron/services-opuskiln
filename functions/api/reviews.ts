@@ -15,7 +15,7 @@ type ReviewsPayload = {
   source: "google_live" | "google_cache";
 };
 
-const MAPS_URL = "https://maps.google.com/?cid=18020669597449550895";
+const MAPS_URL = "https://maps.app.goo.gl/WcEaZnDy5wM2RRCK8";
 const PLACE_QUERY = "Pure Veg RKN Punjabi Soya Chaap Naini Prayagraj";
 
 const CACHED: ReviewsPayload = {

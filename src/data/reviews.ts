@@ -13,9 +13,8 @@ export type ReviewsPayload = {
   source: "google_live" | "google_cache";
 };
 
-/** Google Maps listing (CID) for Pure Veg RKN Punjabi Soya Chaap, Naini. */
-export const GOOGLE_MAPS_URL =
-  "https://maps.google.com/?cid=18020669597449550895";
+/** Google Maps listing for Pure Veg RKN Punjabi Soya Chaap, Naini. */
+export const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/WcEaZnDy5wM2RRCK8";
 
 export const GOOGLE_PLACE_QUERY =
   "Pure Veg RKN Punjabi Soya Chaap Naini Prayagraj";
