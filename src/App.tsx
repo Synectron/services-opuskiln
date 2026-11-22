@@ -32,7 +32,7 @@ function PublicSite() {
   }, []);
 
   useEffect(() => {
-    const nodes = document.querySelectorAll(".reveal");
+    const nodes = [...document.querySelectorAll(".reveal")];
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -49,9 +49,13 @@ function PublicSite() {
           }
         }
       },
-      { threshold: 0.14 },
+      { threshold: 0.08, rootMargin: "80px 0px" },
     );
-    nodes.forEach((node) => observer.observe(node));
+    for (const node of nodes) {
+      const top = node.getBoundingClientRect().top;
+      if (top < window.innerHeight * 0.92) node.classList.add("is-in");
+      else observer.observe(node);
+    }
     return () => observer.disconnect();
   }, [lang]);
 

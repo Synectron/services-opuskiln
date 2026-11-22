@@ -140,7 +140,8 @@ html.lang-hi body {
 }
 
 dialog.sheet {
-  display: flex;
+  /* Must stay none when closed — `display:flex` alone overrides the UA rule. */
+  display: none;
   flex-direction: column;
   width: 100%;
   max-width: 100%;
@@ -161,16 +162,20 @@ dialog.sheet::backdrop {
 }
 
 dialog.sheet[open] {
+  display: flex;
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0;
   animation: sheet-in 0.32s ease;
 }
 
 @media (min-width: 768px) {
-  dialog.sheet {
+  dialog.sheet[open] {
+    inset: 0 0 0 auto;
     width: min(440px, 100vw);
     max-width: 440px;
     height: 100dvh;
     max-height: 100dvh;
-    margin: 0 0 0 auto;
     border-radius: 0;
     animation-name: sheet-side;
   }
@@ -249,7 +254,7 @@ dialog.sheet[open] {
   .cart-pop,
   .loc-spin,
   dialog.sheet[open] {
-    animation: none;
+    animation: none !important;
     opacity: 1;
     transform: none;
     transition: none;
