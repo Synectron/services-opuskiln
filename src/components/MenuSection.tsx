@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { CATEGORIES, MENU, activePortion, itemDesc, itemName, otherPortionLine, portionName, unitPrice, type CategoryId } from "../data/menu.ts";
+import { useCatalog } from "../data/catalog.tsx";
+import { CATEGORIES, activePortion, itemDesc, itemName, otherPortionLine, portionName, unitPrice, type CategoryId } from "../data/menu.ts";
 import { inr } from "../lib/order.ts";
 import { useStore } from "../store.tsx";
 import { SearchIcon, VegMark } from "./Icons.tsx";
@@ -8,24 +9,25 @@ type Filter = "all" | CategoryId;
 
 export function MenuSection() {
   const { t, lang, size, setSize, add } = useStore();
+  const { menu } = useCatalog();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return MENU.filter((item) => {
+    return menu.filter((item) => {
       if (filter !== "all" && item.category !== filter) return false;
       if (!q) return true;
       return `${item.name} ${item.nameHi} ${item.desc} ${item.descHi}`.toLowerCase().includes(q);
     });
-  }, [filter, query]);
+  }, [filter, query, menu]);
 
   const chips: { id: Filter; label: string; count: number }[] = [
-    { id: "all", label: t.all, count: MENU.length },
+    { id: "all", label: t.all, count: menu.length },
     ...CATEGORIES.map((category) => ({
       id: category.id,
       label: lang === "hi" ? category.hi : category.en,
-      count: MENU.filter((item) => item.category === category.id).length,
+      count: menu.filter((item) => item.category === category.id).length,
     })),
   ];
 

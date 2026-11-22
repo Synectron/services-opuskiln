@@ -1,4 +1,31 @@
-export const SITE = {
+export type ShopSettings = {
+  name: string;
+  proprietor: string;
+  phoneDisplay: string;
+  phoneTel: string;
+  whatsapp: string;
+  addressLines: string[];
+  addressLinesHi: string[];
+  locality: string;
+  region: string;
+  postalCode: string;
+  mapQuery: string;
+  lat: number;
+  lng: number;
+  hoursEn: string;
+  hoursHi: string;
+  opens: string;
+  closes: string;
+  orderMinutes: number;
+  freeDelivery: number;
+  zomato: string;
+  swiggy: string;
+  magicpin: string;
+  updatedAt?: string;
+};
+
+/** Static defaults — also used as API fallback and D1 seed source. */
+export const DEFAULT_SITE: ShopSettings = {
   name: "RKN Punjabi Soya Chaap",
   proprietor: "Raju Soni",
   phoneDisplay: "9140587645",
@@ -29,8 +56,20 @@ export const SITE = {
   freeDelivery: 250,
   zomato: "https://www.zomato.com/allahabad",
   swiggy: "https://www.swiggy.com/city/allahabad",
-} as const;
+  magicpin:
+    "https://magicpin.in/Allahabad/Naini/Restaurant/Pure-Veg-Rkn-Punjabi-Soya-Chaap/store/203c06a",
+};
 
-export const mapEmbedSrc = `https://maps.google.com/maps?q=${encodeURIComponent(SITE.mapQuery)}&z=16&output=embed`;
+/** @deprecated Prefer getSite() from runtime — kept for tests and seed. */
+export const SITE = DEFAULT_SITE;
 
-export const directionsHref = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(SITE.mapQuery)}`;
+export function mapEmbedSrcFor(settings: ShopSettings): string {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(settings.mapQuery)}&z=16&output=embed`;
+}
+
+export function directionsHrefFor(settings: ShopSettings): string {
+  return `https://maps.google.com/maps/dir/?api=1&destination=${encodeURIComponent(settings.mapQuery)}`;
+}
+
+export const mapEmbedSrc = mapEmbedSrcFor(DEFAULT_SITE);
+export const directionsHref = directionsHrefFor(DEFAULT_SITE);

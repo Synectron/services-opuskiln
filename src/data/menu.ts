@@ -472,10 +472,15 @@ export const MENU: MenuItem[] = [
   },
 ];
 
-export function findItem(id: string): MenuItem {
-  const item = MENU.find((entry) => entry.id === id);
+export function findItemIn(items: readonly MenuItem[], id: string): MenuItem {
+  const item = items.find((entry) => entry.id === id);
   if (!item) throw new Error(`Unknown menu item: ${id}`);
   return item;
+}
+
+/** Looks up against the static seed menu (tests / offline fallback). Prefer runtime findItem when live. */
+export function findItem(id: string): MenuItem {
+  return findItemIn(MENU, id);
 }
 
 export function itemName(item: MenuItem, lang: Lang): string {

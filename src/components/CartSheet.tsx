@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { SITE } from "../data/site.ts";
-import { findItem, itemName, portionName } from "../data/menu.ts";
+import { useCatalog } from "../data/catalog.tsx";
+import { itemName, portionName } from "../data/menu.ts";
+import { findItem } from "../data/runtime.ts";
 import { buildWhatsAppText, deliveryGap, inr, lineCost, whatsAppUrl, type SharedLocation } from "../lib/order.ts";
 import { useStore } from "../store.tsx";
 import { ChatIcon } from "./Icons.tsx";
@@ -8,6 +9,7 @@ import { LocationShare } from "./LocationShare.tsx";
 
 export function CartSheet() {
   const { t, lang, cart, total, cartOpen, setCartOpen, setQty, setLinePortion, remove, clear } = useStore();
+  const { site } = useCatalog();
   const ref = useRef<HTMLDialogElement>(null);
   const nameId = useId();
   const addressId = useId();
@@ -16,8 +18,8 @@ export function CartSheet() {
   const [address, setAddress] = useState("");
   const [landmark, setLandmark] = useState("");
   const [location, setLocation] = useState<SharedLocation | null>(null);
-  const gap = deliveryGap(total);
-  const pct = Math.min(100, Math.round((total / SITE.freeDelivery) * 100));
+  const gap = deliveryGap(total, site.freeDelivery);
+  const pct = Math.min(100, Math.round((total / site.freeDelivery) * 100));
   const message = buildWhatsAppText({ lang, lines: cart, name, address, landmark, location });
 
   useEffect(() => {
@@ -179,7 +181,7 @@ export function CartSheet() {
                   <span className={gap === 0 ? "text-veg" : "text-[#6e5b4c]"}>
                     {gap === 0 ? t.deliveryUnlocked : t.deliveryNeed(inr(gap))}
                   </span>
-                  <span className="tabular-nums text-[#6e5b4c]">{inr(SITE.freeDelivery)}</span>
+                  <span className="tabular-nums text-[#6e5b4c]">{inr(site.freeDelivery)}</span>
                 </div>
                 <div
                   className="h-2 overflow-hidden rounded-full bg-[#eadfce]"
@@ -211,8 +213,9 @@ export function CartSheet() {
 
 export function OrderBar() {
   const { t, count, total, cartOpen, setCartOpen } = useStore();
+  const { site } = useCatalog();
   if (count === 0 || cartOpen) return null;
-  const gap = deliveryGap(total);
+  const gap = deliveryGap(total, site.freeDelivery);
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-ink/10 bg-[#fffaf3]/95 px-3 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(36,23,15,0.08)] backdrop-blur-md md:hidden">
       <div className="mx-auto flex max-w-6xl items-center gap-3">

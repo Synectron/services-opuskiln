@@ -1,0 +1,13 @@
+name = "rkn-punjabi-soya-chaap"
+compatibility_date = "2025-11-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rkn-menu"
+database_id = "34223aa0-2480-4acc-bff8-e6b4d4c77212"
+migrations_dir = "migrations"
+
+[vars]
+OWNER_EMAIL = "shubhammishrax@gmail.com"
+OWNER_ROLE = "super_admin"

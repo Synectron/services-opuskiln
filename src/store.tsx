@@ -7,12 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import { copy, type Copy } from "./data/i18n.ts";
-import {
-  findItem,
-  itemName,
-  type Lang,
-  type SizeChoice,
-} from "./data/menu.ts";
+import { itemName, type Lang, type SizeChoice } from "./data/menu.ts";
+import { findItem } from "./data/runtime.ts";
 import {
   isCartLine,
   orderCount,

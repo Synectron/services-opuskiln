@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://rkn-punjabi-soya-chaap.services.opuskiln.com/sitemap.xml

@@ -13,13 +13,15 @@ const en = {
     "Tandoor soya chaap, momos and Chinese, cooked when you order. Most plates leave the counter in about 20 minutes.",
   orderWa: "Order on WhatsApp",
   call: "Call",
-  heroAlt: "Grilled paneer tikka skewers on charcoal, the look of a tandoor chaap plate",
+  heroAlt:
+    "Grilled paneer tikka skewers on charcoal, the look of a tandoor chaap plate",
   photoChip: "Chaap from ₹90",
   readyStamp: "≈ 20 min",
   propLine: "Prop. Raju Soni",
   menuKicker: "The card",
   menuTitle: "Order what you actually want.",
-  menuLead: "Every plate is pure vegetarian. Half and full follow the printed card. Most orders are ready in about 20 minutes.",
+  menuLead:
+    "Every plate is pure vegetarian. Half and full follow the printed card. Most orders are ready in about 20 minutes.",
   searchLabel: "Search the menu",
   searchPlaceholder: "Search chaap, momo, chilli…",
   clearSearch: "Clear search",
@@ -29,7 +31,8 @@ const en = {
   portionLabel: "Portion",
   half: "Half",
   full: "Full",
-  portionHint: "Momos are 6 & 12 pc. Tandoori momos are 12 & 24. Mix kurkure is 5 & 10.",
+  portionHint:
+    "Momos are 6 & 12 pc. Tandoori momos are 12 & 24. Mix kurkure is 5 & 10.",
   add: "Add",
   bestseller: "Bestseller",
   pureVeg: "Pure vegetarian",
@@ -49,20 +52,25 @@ const en = {
   landmark: "Landmark",
   landmarkPh: "Near which shop, gate, or college?",
   locTitle: "Share exact location",
-  locNudge: "Optional, and it helps the rider find the door. You can still type an address and a landmark.",
+  locNudge:
+    "Optional, and it helps the rider find the door. You can still type an address and a landmark.",
   locButton: "Use my current location",
   locLoading: "Finding your spot…",
   locAccuracy: (meters: number) => `Accurate to ${meters} m`,
   locViewMap: "View on map",
   locUpdate: "Update location",
   locClear: "Remove pin",
-  locDenied: "Location is off. Type your address or a landmark and the rider can still find you.",
+  locDenied:
+    "Location is off. Type your address or a landmark and the rider can still find you.",
   locTimeout: "That took too long. Type your address or a landmark instead.",
-  locUnavailable: "We couldn't read your location. Type your address or a landmark.",
-  locUnsupported: "This browser can't share location. Type your address or a landmark.",
+  locUnavailable:
+    "We couldn't read your location. Type your address or a landmark.",
+  locUnsupported:
+    "This browser can't share location. Type your address or a landmark.",
   locPreview: "Map preview of your shared location",
   waOrder: "Order on WhatsApp",
-  waHint: "Opens WhatsApp with this order ready to send. Nothing is sent until you tap send there.",
+  waHint:
+    "Opens WhatsApp with this order ready to send. Nothing is sent until you tap send there.",
   clearCart: "Clear order",
   decrease: "Decrease quantity",
   increase: "Increase quantity",
@@ -93,44 +101,71 @@ const en = {
   rollAlt: "Two golden vegetable spring rolls with shredded cabbage",
   momoCap: "Steamed momos",
   rollCap: "Spring rolls",
-  reviewsKicker: "Words",
-  reviewsTitle: "What a full plate feels like.",
-  reviewsNote:
-    "Sample placeholders. These are not reviews from guests. Replace them with real words before the site goes live.",
-  sample: "Sample",
-  quotes: [
-    {
-      quote: "Malai chaap with a charred edge, still soft inside. This is the plate I would send a friend for.",
-      name: "Sample guest",
-      place: "Placeholder",
-    },
-    {
-      quote: "The steam momos were light, and the kurkure ones actually crunched. Twenty minutes felt honest.",
-      name: "Sample guest",
-      place: "Placeholder",
-    },
-    {
-      quote: "We crossed ₹250 for the free delivery, and the Afghani chaap was the one that disappeared first.",
-      name: "Sample guest",
-      place: "Placeholder",
-    },
-  ],
+  reviewsKicker: "Google reviews",
+  reviewsTitle: "What guests say on Google.",
+  reviewsRating: (rating: string, count: number) =>
+    `${rating} out of 5 · ${count} Google reviews`,
+  reviewsEmpty: "Google reviews will show here once they load.",
+  reviewsOnGoogle: "See all on Google",
   visitKicker: "Find the counter",
   visitTitle: "Shani Mandir Chauraha.",
   directions: "Directions",
   callNow: "Call now",
   whatsapp: "WhatsApp",
-  mapTitle: "Map of RKN Punjabi Soya Chaap, Shani Mandir Chauraha, Naini, Prayagraj",
-  mapFallback: "If the map does not load, use Directions. It opens Google Maps for this address.",
+  mapTitle:
+    "Map of RKN Punjabi Soya Chaap, Shani Mandir Chauraha, Naini, Prayagraj",
+  mapFallback:
+    "If the map does not load, use Directions. It opens Google Maps for this address.",
   footerNote: "100% pure vegetarian · Naini, Prayagraj",
-  photoCredit:
-    "Food photos via Wikimedia Commons: paneer tikka by Namitakhaire (CC BY-SA 4.0), veg momos by Gaurav Dhwaj Khadka (CC BY-SA 4.0), spring rolls by Ocdp (CC0).",
+  staffLogin: "Staff login",
+  createdBy: "Created by",
+  privacyPolicy: "Privacy policy",
+  privacyBack: "Back to menu",
+  privacyTitle: "What this site keeps.",
+  privacyUpdated: "22 November 2026",
+  privacySections: [
+    {
+      title: "Who runs this site",
+      paragraphs: [
+        "This website is for Pure Veg RKN Punjabi Soya Chaap in Naini, Prayagraj. The shop owns the menu, phone number, and orders.",
+        "The site was built and is hosted by Opuskiln (opuskiln.com). Opuskiln runs the software; the shop runs the kitchen.",
+      ],
+    },
+    {
+      title: "What we collect when you order",
+      paragraphs: [
+        "Orders go through WhatsApp. If you type a name, address, or landmark in the cart, that text is packed into the WhatsApp message you send. It is not stored in Opuskiln’s database as an order history.",
+        "If you share your location from the cart, the pin is added to that same WhatsApp message so the rider can find you. The site does not keep a trail of where you went later.",
+      ],
+    },
+    {
+      title: "Staff login",
+      paragraphs: [
+        "Shop staff can sign in to update the menu and shop details. Login uses an email and a password. Passwords are stored only as a secure hash.",
+        "Session cookies keep staff signed in on that browser. They are used only for the admin area.",
+      ],
+    },
+    {
+      title: "Hosting and third parties",
+      paragraphs: [
+        "The public site and admin API run on Cloudflare Pages and Cloudflare D1.",
+        "Google reviews shown on the site come from Google Maps or Google Places when configured. Opening “See all on Google”, Zomato, Swiggy, or magicpin takes you to those services under their own policies.",
+        "WhatsApp is operated by Meta. Once you tap send, that chat follows WhatsApp’s terms.",
+      ],
+    },
+    {
+      title: "How long it stays",
+      paragraphs: [
+        "Menu and shop settings stay while the shop uses this site. Staff can change or remove that content from the admin area.",
+        "Opuskiln does not sell visitor lists. Questions: contact@opuskiln.com or the shop phone on this site.",
+      ],
+    },
+  ],
   viewOrder: "View order",
   fab: "Chat on WhatsApp",
   added: (name: string) => `Added ${name}`,
   items: (count: number) => (count === 1 ? "1 item" : `${count} items`),
-  hello:
-    "Hello RKN Punjabi Soya Chaap, I would like to place an order.",
+  hello: "Hello RKN Punjabi Soya Chaap, I would like to place an order.",
 };
 
 const hi = {
@@ -154,7 +189,8 @@ const hi = {
   propLine: "मालिक राजू सोनी",
   menuKicker: "मेनू कार्ड",
   menuTitle: "जो खाना है, वही ऑर्डर करें।",
-  menuLead: "हर प्लेट शुद्ध शाकाहारी है। हाफ और फुल छपे हुए कार्ड के अनुसार हैं। ज़्यादातर ऑर्डर लगभग 20 मिनट में तैयार होते हैं।",
+  menuLead:
+    "हर प्लेट शुद्ध शाकाहारी है। हाफ और फुल छपे हुए कार्ड के अनुसार हैं। ज़्यादातर ऑर्डर लगभग 20 मिनट में तैयार होते हैं।",
   searchLabel: "मेनू खोजें",
   searchPlaceholder: "चाप, मोमो, चिल्ली खोजें…",
   clearSearch: "खोज मिटाएँ",
@@ -164,7 +200,8 @@ const hi = {
   portionLabel: "पोर्शन",
   half: "हाफ",
   full: "फुल",
-  portionHint: "मोमोज़ 6 और 12 पीस। तंदूरी मोमोज़ 12 और 24। मिक्स कुरकुरे 5 और 10।",
+  portionHint:
+    "मोमोज़ 6 और 12 पीस। तंदूरी मोमोज़ 12 और 24। मिक्स कुरकुरे 5 और 10।",
   add: "जोड़ें",
   bestseller: "बेस्टसेलर",
   pureVeg: "शुद्ध शाकाहारी",
@@ -175,7 +212,8 @@ const hi = {
   browseMenu: "मेनू देखें",
   remove: "हटाएँ",
   total: "कुल",
-  deliveryNeed: (amount: string) => `फ्री होम डिलीवरी के लिए ${amount} और जोड़ें`,
+  deliveryNeed: (amount: string) =>
+    `फ्री होम डिलीवरी के लिए ${amount} और जोड़ें`,
   deliveryUnlocked: "फ्री होम डिलीवरी खुल गई",
   name: "नाम",
   address: "पता",
@@ -184,7 +222,8 @@ const hi = {
   landmark: "लैंडमार्क",
   landmarkPh: "किस दुकान, गेट या कॉलेज के पास?",
   locTitle: "सटीक लोकेशन भेजें",
-  locNudge: "ज़रूरी नहीं, पर राइडर को दरवाज़ा ढूँढने में मदद मिलती है। पता और लैंडमार्क भी लिख सकते हैं।",
+  locNudge:
+    "ज़रूरी नहीं, पर राइडर को दरवाज़ा ढूँढने में मदद मिलती है। पता और लैंडमार्क भी लिख सकते हैं।",
   locButton: "मेरी मौजूदा लोकेशन इस्तेमाल करें",
   locLoading: "आपकी जगह ढूँढ रहे हैं…",
   locAccuracy: (meters: number) => `${meters} मीटर तक सटीक`,
@@ -197,7 +236,8 @@ const hi = {
   locUnsupported: "यह ब्राउज़र लोकेशन नहीं भेज सकता। पता या लैंडमार्क लिख दें।",
   locPreview: "आपकी शेयर की गई जगह का नक्शा",
   waOrder: "व्हाट्सऐप पर ऑर्डर",
-  waHint: "व्हाट्सऐप खुलेगा और यह ऑर्डर लिखा होगा। वहाँ भेजें दबाने तक कुछ नहीं जाता।",
+  waHint:
+    "व्हाट्सऐप खुलेगा और यह ऑर्डर लिखा होगा। वहाँ भेजें दबाने तक कुछ नहीं जाता।",
   clearCart: "ऑर्डर मिटाएँ",
   decrease: "मात्रा घटाएँ",
   increase: "मात्रा बढ़ाएँ",
@@ -228,38 +268,65 @@ const hi = {
   rollAlt: "कटी पत्तागोभी के साथ दो सुनहरे वेज स्प्रिंग रोल",
   momoCap: "स्टीम मोमोज़",
   rollCap: "स्प्रिंग रोल",
-  reviewsKicker: "बातें",
-  reviewsTitle: "भरी प्लेट का स्वाद कैसा लगता है।",
-  reviewsNote:
-    "ये नमूना समीक्षाएँ हैं, असली मेहमानों की नहीं। साइट लाइव करने से पहले इन्हें असली बातों से बदल दें।",
-  sample: "नमूना",
-  quotes: [
-    {
-      quote: "मलाई चाप का किनारा कोयले वाला था, अंदर से नरम। दोस्त को यही प्लेट भेजूँगा।",
-      name: "नमूना मेहमान",
-      place: "प्लेसहोल्डर",
-    },
-    {
-      quote: "स्टीम मोमोज़ हल्के थे, और कुरकुरे वाले सच में कुरकुराए। बीस मिनट का वादा सच्चा लगा।",
-      name: "नमूना मेहमान",
-      place: "प्लेसहोल्डर",
-    },
-    {
-      quote: "फ्री डिलीवरी के लिए ₹250 पार किया, और अफगानी चाप सबसे पहले खत्म हुई।",
-      name: "नमूना मेहमान",
-      place: "प्लेसहोल्डर",
-    },
-  ],
+  reviewsKicker: "गूगल राय",
+  reviewsTitle: "गूगल पर मेहमान क्या कहते हैं।",
+  reviewsRating: (rating: string, count: number) =>
+    `${rating} में से 5 · ${count} गूगल समीक्षाएँ`,
+  reviewsEmpty: "गूगल समीक्षाएँ लोड होते ही यहाँ दिखेंगी।",
+  reviewsOnGoogle: "गूगल पर सब देखें",
   visitKicker: "काउंटर कहाँ है",
   visitTitle: "शनि मंदिर चौराहा।",
   directions: "रास्ता",
   callNow: "अभी कॉल करें",
   whatsapp: "व्हाट्सऐप",
-  mapTitle: "आरकेएन पंजाबी सोया चाप का नक्शा, शनि मंदिर चौराहा, नैनी, प्रयागराज",
+  mapTitle:
+    "आरकेएन पंजाबी सोया चाप का नक्शा, शनि मंदिर चौराहा, नैनी, प्रयागराज",
   mapFallback: "नक्शा न खुले तो रास्ता दबाएँ। गूगल मैप्स इसी पते पर खुल जाएगा।",
   footerNote: "100% शुद्ध शाकाहारी · नैनी, प्रयागराज",
-  photoCredit:
-    "खाने की तस्वीरें विकिमीडिया कॉमन्स से: पनीर टिक्का — Namitakhaire (CC BY-SA 4.0), वेज मोमोज़ — Gaurav Dhwaj Khadka (CC BY-SA 4.0), स्प्रिंग रोल — Ocdp (CC0)।",
+  staffLogin: "स्टाफ़ लॉगिन",
+  createdBy: "निर्मित",
+  privacyPolicy: "गोपनीयता नीति",
+  privacyBack: "मेनू पर वापस",
+  privacyTitle: "यह साइट क्या रखती है।",
+  privacyUpdated: "22 नवंबर 2026",
+  privacySections: [
+    {
+      title: "यह साइट कौन चलाता है",
+      paragraphs: [
+        "यह वेबसाइट नैनी, प्रयागराज की Pure Veg RKN Punjabi Soya Chaap के लिए है। मेनू, फ़ोन नंबर और ऑर्डर दुकान के हैं।",
+        "साइट Opuskiln (opuskiln.com) ने बनाई और होस्ट की है। Opuskiln सॉफ़्टवेयर चलाता है; रसोई दुकान चलाती है।",
+      ],
+    },
+    {
+      title: "ऑर्डर करते समय क्या लिया जाता है",
+      paragraphs: [
+        "ऑर्डर व्हाट्सऐप से जाता है। अगर आप कार्ट में नाम, पता या लैंडमार्क लिखते हैं, वह टेक्स्ट उसी व्हाट्सऐप संदेश में जाता है जो आप भेजते हैं। Opuskiln के डेटाबेस में ऑर्डर इतिहास के रूप में नहीं रखा जाता।",
+        "अगर आप कार्ट से लोकेशन शेयर करते हैं, वह पिन उसी संदेश में जुड़ती है ताकि राइडर आपको ढूँढ सके। साइट बाद में आपकी जगह का ट्रेल नहीं रखती।",
+      ],
+    },
+    {
+      title: "स्टाफ़ लॉगिन",
+      paragraphs: [
+        "दुकान का स्टाफ़ मेनू और दुकान की जानकारी अपडेट करने के लिए साइन इन कर सकता है। लॉगिन में ईमेल और पासवर्ड लगता है। पासवर्ड केवल सुरक्षित हैश के रूप में रखा जाता है।",
+        "सेशन कुकीज़ उस ब्राउज़र पर स्टाफ़ को साइन-इन रखती हैं। ये केवल एडमिन हिस्से के लिए हैं।",
+      ],
+    },
+    {
+      title: "होस्टिंग और तीसरे पक्ष",
+      paragraphs: [
+        "पब्लिक साइट और एडमिन API Cloudflare Pages और Cloudflare D1 पर चलते हैं।",
+        "साइट पर दिखने वाली गूगल समीक्षाएँ Google Maps या Google Places से आती हैं। “गूगल पर सब देखें”, Zomato, Swiggy या magicpin खोलने पर उनकी अपनी नीति लागू होती है।",
+        "WhatsApp Meta चलाता है। भेजें दबाने के बाद वह चैट WhatsApp के नियमों के अधीन है।",
+      ],
+    },
+    {
+      title: "कितने समय तक रहता है",
+      paragraphs: [
+        "मेनू और दुकान की सेटिंग्स तब तक रहती हैं जब तक दुकान इस साइट का इस्तेमाल करती है। स्टाफ़ एडमिन से उन्हें बदल या हटा सकता है।",
+        "Opuskiln विज़िटर सूची नहीं बेचता। सवाल: contact@opuskiln.com या इस साइट पर दिया दुकान का फ़ोन।",
+      ],
+    },
+  ],
   viewOrder: "ऑर्डर देखें",
   fab: "व्हाट्सऐप पर बात करें",
   added: (name: string) => `${name} जोड़ दिया`,
