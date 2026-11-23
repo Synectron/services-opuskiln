@@ -69,8 +69,9 @@ const en = {
     "This browser can't share location. Type your address or a landmark.",
   locPreview: "Map preview of your shared location",
   waOrder: "Order on WhatsApp",
+  waSending: "Saving order…",
   waHint:
-    "Opens WhatsApp with this order ready to send. Nothing is sent until you tap send there.",
+    "Saves the order for the kitchen board, then opens WhatsApp ready to send. Nothing goes on WhatsApp until you tap send there.",
   clearCart: "Clear order",
   decrease: "Decrease quantity",
   increase: "Increase quantity",
@@ -236,8 +237,9 @@ const hi = {
   locUnsupported: "यह ब्राउज़र लोकेशन नहीं भेज सकता। पता या लैंडमार्क लिख दें।",
   locPreview: "आपकी शेयर की गई जगह का नक्शा",
   waOrder: "व्हाट्सऐप पर ऑर्डर",
+  waSending: "ऑर्डर सेव हो रहा है…",
   waHint:
-    "व्हाट्सऐप खुलेगा और यह ऑर्डर लिखा होगा। वहाँ भेजें दबाने तक कुछ नहीं जाता।",
+    "किचन बोर्ड के लिए ऑर्डर सेव होगा, फिर व्हाट्सऐप खुलेगा। वहाँ भेजें दबाने तक मैसेज नहीं जाता।",
   clearCart: "ऑर्डर मिटाएँ",
   decrease: "मात्रा घटाएँ",
   increase: "मात्रा बढ़ाएँ",

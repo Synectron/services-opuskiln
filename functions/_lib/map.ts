@@ -1,5 +1,7 @@
 import type { MenuRow, SettingsRow } from "./env.ts";
 
+export { mapOrder } from "./orders.ts";
+
 export function mapMenuItem(row: MenuRow) {
   return {
     id: row.id,

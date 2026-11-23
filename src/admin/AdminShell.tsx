@@ -17,10 +17,18 @@ export function AdminShell() {
               {user?.role ? ` · ${user.role.replaceAll("_", " ")}` : ""}
             </p>
           </div>
-          <nav className="flex gap-1">
+          <nav className="flex flex-wrap gap-1">
             <NavLink
               to="/admin"
               end
+              className={({ isActive }) =>
+                `rounded-full px-3 py-2 text-sm font-semibold ${isActive ? "bg-maroon text-[#fffaf3]" : "text-ink/80 hover:bg-white"}`
+              }
+            >
+              Orders
+            </NavLink>
+            <NavLink
+              to="/admin/menu"
               className={({ isActive }) =>
                 `rounded-full px-3 py-2 text-sm font-semibold ${isActive ? "bg-maroon text-[#fffaf3]" : "text-ink/80 hover:bg-white"}`
               }

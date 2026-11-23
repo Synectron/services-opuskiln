@@ -48,9 +48,12 @@ npm run build
 ## Owner admin
 
 - `/admin/login` — email / password
-- `/admin` — menu CRUD (add, edit prices, hide items)
+- `/admin` — live orders board (polls every few seconds, optional ring on new orders)
+- `/admin/menu` — menu CRUD (add, edit prices, hide items)
 - `/admin/settings` — phone, WhatsApp, hours, free-delivery threshold, Zomato/Swiggy URLs
 - `/admin/admins` — super admin only: add staff, reset passwords, deactivate accounts
+
+Guest checkout still opens WhatsApp, and also saves the order to D1 so the kitchen board can Accept / Done it.
 
 Admins are stored in D1. Your env `OWNER_EMAIL` / `OWNER_PASSWORD` bootstraps the first super admin on login; after that you can add more from the Admins page.
 

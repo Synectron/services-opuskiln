@@ -4,6 +4,7 @@ import { AdminAdmins } from "./admin/AdminAdmins.tsx";
 import { AdminAuthProvider, RequireOwner } from "./admin/AdminAuth.tsx";
 import { AdminLogin } from "./admin/AdminLogin.tsx";
 import { AdminMenu } from "./admin/AdminMenu.tsx";
+import { AdminOrders } from "./admin/AdminOrders.tsx";
 import { AdminSettings } from "./admin/AdminSettings.tsx";
 import { AdminShell } from "./admin/AdminShell.tsx";
 import {
@@ -100,7 +101,8 @@ export default function App() {
         }
       >
         <Route element={<AdminShell />}>
-          <Route index element={<AdminMenu />} />
+          <Route index element={<AdminOrders />} />
+          <Route path="menu" element={<AdminMenu />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="admins" element={<AdminAdmins />} />
         </Route>

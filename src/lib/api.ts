@@ -139,3 +139,67 @@ export function deactivateAdmin(email: string): Promise<{ ok: boolean }> {
     method: "DELETE",
   });
 }
+
+export type OrderStatus = "new" | "accepted" | "done" | "cancelled";
+
+export type OrderItemSnapshot = {
+  id: string;
+  portion: "half" | "full" | "single";
+  qty: number;
+  name: string;
+  nameHi: string;
+  portionLabel: string;
+  unitPrice: number;
+  lineTotal: number;
+};
+
+export type ShopOrder = {
+  id: string;
+  status: OrderStatus;
+  lang: "en" | "hi";
+  customerName: string;
+  address: string;
+  landmark: string;
+  location: { lat: number; lng: number; accuracy: number } | null;
+  items: OrderItemSnapshot[];
+  total: number;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export function createOrder(body: {
+  lang: "en" | "hi";
+  lines: { id: string; portion: "half" | "full" | "single"; qty: number }[];
+  name: string;
+  address: string;
+  landmark?: string;
+  location?: { lat: number; lng: number; accuracy: number } | null;
+  message?: string;
+}): Promise<{ order: ShopOrder }> {
+  return request("/api/orders", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function fetchAdminOrders(params?: {
+  status?: OrderStatus;
+  limit?: number;
+}): Promise<{ orders: ShopOrder[]; newCount: number }> {
+  const query = new URLSearchParams();
+  if (params?.status) query.set("status", params.status);
+  if (params?.limit) query.set("limit", String(params.limit));
+  const suffix = query.size ? `?${query}` : "";
+  return request(`/api/admin/orders${suffix}`);
+}
+
+export function updateOrderStatus(
+  id: string,
+  status: OrderStatus,
+): Promise<{ order: ShopOrder }> {
+  return request(`/api/admin/orders/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}

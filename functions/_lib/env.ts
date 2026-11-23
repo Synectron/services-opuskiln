@@ -54,3 +54,22 @@ export type SettingsRow = {
   magicpin: string;
   updated_at: string;
 };
+
+export type OrderStatus = "new" | "accepted" | "done" | "cancelled";
+
+export type OrderRow = {
+  id: string;
+  status: OrderStatus;
+  lang: string;
+  customer_name: string;
+  address: string;
+  landmark: string;
+  lat: number | null;
+  lng: number | null;
+  accuracy: number | null;
+  items_json: string;
+  total: number;
+  message: string;
+  created_at: string;
+  updated_at: string;
+};
