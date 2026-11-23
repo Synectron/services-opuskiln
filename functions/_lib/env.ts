@@ -72,4 +72,6 @@ export type OrderRow = {
   message: string;
   created_at: string;
   updated_at: string;
+  customer_id: string | null;
+  phone: string;
 };

@@ -1,5 +1,11 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  CustomerAuthProvider,
+  RequireCustomer,
+} from "./account/CustomerAuth.tsx";
+import { CustomerLogin } from "./account/CustomerLogin.tsx";
+import { CustomerOrders } from "./account/CustomerOrders.tsx";
 import { AdminAdmins } from "./admin/AdminAdmins.tsx";
 import { AdminAuthProvider, RequireOwner } from "./admin/AdminAuth.tsx";
 import { AdminLogin } from "./admin/AdminLogin.tsx";
@@ -81,35 +87,42 @@ function PublicSite() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<PublicSite />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route
-        path="/admin/login"
-        element={
-          <AdminAuthProvider>
-            <AdminLogin />
-          </AdminAuthProvider>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <AdminAuthProvider>
-            <RequireOwner />
-          </AdminAuthProvider>
-        }
-      >
-        <Route element={<AdminShell />}>
-          <Route index element={<Navigate to="/admin/orders" replace />} />
-          <Route path="orders" element={<AdminOrders />} />
-          <Route path="orders/:day" element={<AdminOrders />} />
-          <Route path="menu" element={<AdminMenu />} />
-          <Route path="settings" element={<AdminSettings />} />
-          <Route path="admins" element={<AdminAdmins />} />
+    <CustomerAuthProvider>
+      <Routes>
+        <Route path="/" element={<PublicSite />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/account/login" element={<CustomerLogin />} />
+        <Route path="/account" element={<RequireCustomer />}>
+          <Route index element={<Navigate to="/account/orders" replace />} />
+          <Route path="orders" element={<CustomerOrders />} />
         </Route>
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route
+          path="/admin/login"
+          element={
+            <AdminAuthProvider>
+              <AdminLogin />
+            </AdminAuthProvider>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminAuthProvider>
+              <RequireOwner />
+            </AdminAuthProvider>
+          }
+        >
+          <Route element={<AdminShell />}>
+            <Route index element={<Navigate to="/admin/orders" replace />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="orders/:day" element={<AdminOrders />} />
+            <Route path="menu" element={<AdminMenu />} />
+            <Route path="settings" element={<AdminSettings />} />
+            <Route path="admins" element={<AdminAdmins />} />
+          </Route>
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </CustomerAuthProvider>
   );
 }

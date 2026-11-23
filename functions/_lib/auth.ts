@@ -1,7 +1,13 @@
 import { findAdmin, type AdminRole } from "./admins.ts";
+import {
+  findCustomerById,
+  mapCustomer,
+  type CustomerPublic,
+} from "./customers.ts";
 import type { Env } from "./env.ts";
 
 const COOKIE = "rkn_session";
+const CUSTOMER_COOKIE = "rkn_customer";
 const MAX_AGE_SEC = 60 * 60 * 24 * 14;
 
 function b64url(bytes: ArrayBuffer | Uint8Array): string {
@@ -182,4 +188,114 @@ export function timingSafeEqual(a: string, b: string): boolean {
   for (let i = 0; i < a.length; i += 1)
     out |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return out === 0;
+}
+
+export async function createCustomerSessionToken(
+  customerId: string,
+  secret: string,
+): Promise<string> {
+  const exp = Math.floor(Date.now() / 1000) + MAX_AGE_SEC;
+  const payload = b64url(
+    new TextEncoder().encode(
+      JSON.stringify({ kind: "customer", id: customerId, exp }),
+    ),
+  );
+  const key = await hmacKey(secret);
+  const sig = b64url(
+    await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload)),
+  );
+  return `${payload}.${sig}`;
+}
+
+export async function verifyCustomerSessionToken(
+  token: string,
+  secret: string,
+): Promise<{ id: string } | null> {
+  const [payload, sig] = token.split(".");
+  if (!payload || !sig) return null;
+  const key = await hmacKey(secret);
+  const ok = await crypto.subtle.verify(
+    "HMAC",
+    key,
+    fromB64url(sig),
+    new TextEncoder().encode(payload),
+  );
+  if (!ok) return null;
+  try {
+    const data = JSON.parse(new TextDecoder().decode(fromB64url(payload))) as {
+      kind?: string;
+      id?: string;
+      email?: string;
+      exp?: number;
+    };
+    // Reject admin tokens and malformed payloads.
+    if (data.kind !== "customer" || data.email || !data.id || !data.exp) {
+      return null;
+    }
+    if (data.exp < Math.floor(Date.now() / 1000)) return null;
+    return { id: data.id };
+  } catch {
+    return null;
+  }
+}
+
+export function customerSessionCookie(token: string, secure: boolean): string {
+  const parts = [
+    `${CUSTOMER_COOKIE}=${token}`,
+    "Path=/",
+    "HttpOnly",
+    "SameSite=Lax",
+    `Max-Age=${MAX_AGE_SEC}`,
+  ];
+  if (secure) parts.push("Secure");
+  return parts.join("; ");
+}
+
+export function clearCustomerSessionCookie(secure: boolean): string {
+  const parts = [
+    `${CUSTOMER_COOKIE}=`,
+    "Path=/",
+    "HttpOnly",
+    "SameSite=Lax",
+    "Max-Age=0",
+  ];
+  if (secure) parts.push("Secure");
+  return parts.join("; ");
+}
+
+export async function readCustomerSession(
+  request: Request,
+  env: Env,
+): Promise<CustomerPublic | null> {
+  if (!env.SESSION_SECRET) return null;
+  const token = readCookie(request, CUSTOMER_COOKIE);
+  if (!token) return null;
+  const session = await verifyCustomerSessionToken(token, env.SESSION_SECRET);
+  if (!session) return null;
+  const row = await findCustomerById(env.DB, session.id);
+  if (!row) return null;
+  return mapCustomer(row);
+}
+
+export async function requireCustomer(
+  request: Request,
+  env: Env,
+): Promise<CustomerPublic | Response> {
+  if (!env.SESSION_SECRET) {
+    return new Response(
+      JSON.stringify({ error: "Customer auth is not configured" }),
+      {
+        status: 503,
+        headers: { "content-type": "application/json; charset=utf-8" },
+      },
+    );
+  }
+  const customer = await readCustomerSession(request, env);
+  if (!customer) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "content-type": "application/json; charset=utf-8" },
+    });
+  }
+  return customer;
 }

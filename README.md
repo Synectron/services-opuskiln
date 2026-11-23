@@ -48,12 +48,14 @@ npm run build
 ## Owner admin
 
 - `/admin/login` — email / password
+- `/account/login` — customer phone + password (register / sign in)
+- `/account/orders` — customer order history with kitchen status
 - `/admin/orders` — kitchen dashboard by day (IST); `/admin/orders/YYYY-MM-DD` for past days; polls + optional ring on new orders
 - `/admin/menu` — menu CRUD (add, edit prices, hide items)
 - `/admin/settings` — phone, WhatsApp, hours, free-delivery threshold, Zomato/Swiggy URLs
 - `/admin/admins` — super admin only: add staff, reset passwords, deactivate accounts
 
-Guest checkout still opens WhatsApp, and also saves the order to D1 so the kitchen board can Accept / Done it.
+Guest checkout still opens WhatsApp and saves the order to D1. Signed-in customers get `customer_id` on the order so it appears under My orders.
 
 Admins are stored in D1. Your env `OWNER_EMAIL` / `OWNER_PASSWORD` bootstraps the first super admin on login; after that you can add more from the Admins page.
 

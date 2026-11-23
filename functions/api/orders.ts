@@ -1,3 +1,5 @@
+import { readCustomerSession } from "../_lib/auth.ts";
+import { normalizePhone } from "../_lib/customers.ts";
 import type { Env, MenuRow, OrderRow } from "../_lib/env.ts";
 import { error, json, readJson } from "../_lib/http.ts";
 import {
@@ -12,6 +14,7 @@ type Body = {
   lang?: string;
   lines?: unknown;
   name?: string;
+  phone?: string;
   address?: string;
   landmark?: string;
   location?: Partial<OrderLocation> | null;
@@ -59,7 +62,27 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   }
   const location = locationResult;
 
-  const name = (body.name ?? "").trim().slice(0, 80);
+  const sessionCustomer = await readCustomerSession(
+    context.request,
+    context.env,
+  );
+
+  let name = (body.name ?? "").trim().slice(0, 80);
+  if (!name && sessionCustomer) name = sessionCustomer.name;
+
+  let phone = "";
+  const phoneRaw = (body.phone ?? "").trim();
+  if (phoneRaw) {
+    const normalized = normalizePhone(phoneRaw);
+    if (!normalized) {
+      return error("Enter a valid 10-digit Indian mobile number");
+    }
+    phone = normalized;
+  } else if (sessionCustomer) {
+    phone = sessionCustomer.phone;
+  }
+
+  const customerId = sessionCustomer?.id ?? null;
   const address = (body.address ?? "").trim().slice(0, 240);
   const landmark = (body.landmark ?? "").trim().slice(0, 160);
   const message = (body.message ?? "").trim().slice(0, 4000);
@@ -112,8 +135,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
   try {
     await context.env.DB.prepare(
       `INSERT INTO orders
-        (id, status, lang, customer_name, address, landmark, lat, lng, accuracy, items_json, total, message, created_at, updated_at)
-       VALUES (?, 'new', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+        (id, status, lang, customer_name, address, landmark, lat, lng, accuracy, items_json, total, message, customer_id, phone, created_at, updated_at)
+       VALUES (?, 'new', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
     )
       .bind(
         id,
@@ -127,6 +150,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         JSON.stringify(items),
         total,
         message,
+        customerId,
+        phone,
       )
       .run();
 

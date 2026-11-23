@@ -28,6 +28,8 @@ export type MappedOrder = {
   status: OrderStatus;
   lang: "en" | "hi";
   customerName: string;
+  phone: string;
+  customerId: string | null;
   address: string;
   landmark: string;
   location: OrderLocation | null;
@@ -69,6 +71,8 @@ export function mapOrder(row: OrderRow): MappedOrder {
     status: row.status,
     lang: row.lang === "hi" ? "hi" : "en",
     customerName: row.customer_name,
+    phone: row.phone || "",
+    customerId: row.customer_id || null,
     address: row.address,
     landmark: row.landmark,
     location: hasCoords

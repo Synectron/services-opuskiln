@@ -158,6 +158,8 @@ export type ShopOrder = {
   status: OrderStatus;
   lang: "en" | "hi";
   customerName: string;
+  phone: string;
+  customerId: string | null;
   address: string;
   landmark: string;
   location: { lat: number; lng: number; accuracy: number } | null;
@@ -168,10 +170,17 @@ export type ShopOrder = {
   updatedAt: string;
 };
 
+export type CustomerAccount = {
+  id: string;
+  phone: string;
+  name: string;
+};
+
 export function createOrder(body: {
   lang: "en" | "hi";
   lines: { id: string; portion: "half" | "full" | "single"; qty: number }[];
   name: string;
+  phone?: string;
   address: string;
   landmark?: string;
   location?: { lat: number; lng: number; accuracy: number } | null;
@@ -181,6 +190,42 @@ export function createOrder(body: {
     method: "POST",
     body: JSON.stringify(body),
   });
+}
+
+export function customerRegister(body: {
+  phone: string;
+  password: string;
+  name: string;
+}): Promise<{ ok: boolean; customer: CustomerAccount }> {
+  return request("/api/account/register", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function customerLogin(
+  phone: string,
+  password: string,
+): Promise<{ ok: boolean; customer: CustomerAccount }> {
+  return request("/api/account/login", {
+    method: "POST",
+    body: JSON.stringify({ phone, password }),
+  });
+}
+
+export function customerLogout(): Promise<{ ok: boolean }> {
+  return request("/api/account/logout", { method: "POST" });
+}
+
+export function fetchCustomerMe(): Promise<{ customer: CustomerAccount }> {
+  return request("/api/account/me");
+}
+
+export function fetchCustomerOrders(): Promise<{
+  customer: CustomerAccount;
+  orders: ShopOrder[];
+}> {
+  return request("/api/account/orders");
 }
 
 export type DayOrderStats = {

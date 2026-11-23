@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useCustomerAuth } from "../account/CustomerAuth.tsx";
 import { useCatalog } from "../data/catalog.tsx";
 import { itemName, portionName } from "../data/menu.ts";
 import { findItem } from "../data/runtime.ts";
@@ -15,6 +17,12 @@ import { useStore } from "../store.tsx";
 import { ChatIcon } from "./Icons.tsx";
 import { LocationShare } from "./LocationShare.tsx";
 
+function displayPhone(stored: string): string {
+  const digits = stored.replace(/\D/g, "");
+  if (digits.startsWith("91") && digits.length === 12) return digits.slice(2);
+  return stored;
+}
+
 export function CartSheet() {
   const {
     t,
@@ -29,11 +37,14 @@ export function CartSheet() {
     clear,
   } = useStore();
   const { site } = useCatalog();
+  const { customer } = useCustomerAuth();
   const ref = useRef<HTMLDialogElement>(null);
   const nameId = useId();
+  const phoneId = useId();
   const addressId = useId();
   const landmarkId = useId();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [landmark, setLandmark] = useState("");
   const [location, setLocation] = useState<SharedLocation | null>(null);
@@ -50,6 +61,12 @@ export function CartSheet() {
     location,
   });
 
+  useEffect(() => {
+    if (!customer) return;
+    setName((current) => current || customer.name);
+    setPhone((current) => current || displayPhone(customer.phone));
+  }, [customer]);
+
   async function placeOrder() {
     if (submitting || cart.length === 0) return;
     setSubmitting(true);
@@ -60,6 +77,7 @@ export function CartSheet() {
         lang,
         lines: cart,
         name,
+        phone,
         address,
         landmark,
         location,
@@ -231,6 +249,18 @@ export function CartSheet() {
                 {t.clearCart}
               </button>
               <div className="mt-4 grid gap-3 pb-4">
+                {!customer && (
+                  <p className="rounded-xl bg-maroon/5 px-3 py-2 text-xs font-semibold text-[#6e5b4c]">
+                    <Link
+                      to="/account/login"
+                      className="text-maroon underline"
+                      onClick={() => setCartOpen(false)}
+                    >
+                      {t.accountSignInLink}
+                    </Link>{" "}
+                    — {t.accountTrackHint}
+                  </p>
+                )}
                 <LocationShare
                   t={t}
                   location={location}
@@ -248,6 +278,23 @@ export function CartSheet() {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder={t.namePh}
+                    className="h-12 rounded-xl bg-white px-3 text-base font-medium ring-1 ring-[#e4d5c0] outline-none focus-visible:ring-2 focus-visible:ring-maroon"
+                  />
+                </label>
+                <label
+                  className="grid gap-1 text-sm font-semibold"
+                  htmlFor={phoneId}
+                >
+                  {t.phone}
+                  <input
+                    id={phoneId}
+                    name="tel"
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                    placeholder={t.phonePh}
                     className="h-12 rounded-xl bg-white px-3 text-base font-medium ring-1 ring-[#e4d5c0] outline-none focus-visible:ring-2 focus-visible:ring-maroon"
                   />
                 </label>

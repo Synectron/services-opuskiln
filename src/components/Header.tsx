@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCustomerAuth } from "../account/CustomerAuth.tsx";
 import { useCatalog } from "../data/catalog.tsx";
 import { useStore } from "../store.tsx";
 import { CartIcon, LogoMark } from "./Icons.tsx";
@@ -14,6 +15,7 @@ const LINKS = [
 export function Header() {
   const { t, lang, setLang, count, setCartOpen } = useStore();
   const { site } = useCatalog();
+  const { customer } = useCustomerAuth();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -65,10 +67,10 @@ export function Header() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <Link
-            to="/admin/login"
-            className="hidden min-h-9 items-center rounded-full px-3 text-sm font-semibold text-ink/70 ring-1 ring-ink/10 transition hover:bg-white hover:text-ink sm:inline-flex"
+            to={customer ? "/account/orders" : "/account/login"}
+            className="hidden min-h-9 items-center rounded-full px-3 text-sm font-semibold text-ink/80 ring-1 ring-ink/10 transition hover:bg-white hover:text-ink sm:inline-flex"
           >
-            {t.staffLogin}
+            {customer ? t.accountMyOrders : t.accountSignInLink}
           </Link>
           <div
             role="group"
@@ -124,10 +126,10 @@ export function Header() {
           </a>
         ))}
         <Link
-          to="/admin/login"
-          className="shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold text-ink/70 ring-1 ring-ink/10"
+          to={customer ? "/account/orders" : "/account/login"}
+          className="shrink-0 rounded-full px-3 py-1.5 text-sm font-semibold text-ink/80 ring-1 ring-ink/10"
         >
-          {t.staffLogin}
+          {customer ? t.accountMyOrders : t.accountSignInLink}
         </Link>
       </nav>
     </header>
