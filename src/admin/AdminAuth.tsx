@@ -11,14 +11,14 @@ import { fetchMe, logout as apiLogout } from "../lib/api.ts";
 
 type User = { email: string; role: string };
 
-type AdminAuth = {
+type AdminAuthValue = {
   user: User | null;
   loading: boolean;
   setUser: (user: User | null) => void;
   logout: () => Promise<void>;
 };
 
-const AdminAuthContext = createContext<AdminAuth | null>(null);
+const AdminAuthContext = createContext<AdminAuthValue | null>(null);
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -42,7 +42,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const value = useMemo<AdminAuth>(
+  const value = useMemo<AdminAuthValue>(
     () => ({
       user,
       loading,
@@ -63,7 +63,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 }
 
 // oxlint-disable-next-line react/only-export-components
-export function useAdminAuth(): AdminAuth {
+export function useAdminAuth(): AdminAuthValue {
   const ctx = useContext(AdminAuthContext);
   if (!ctx)
     throw new Error("useAdminAuth must be used within AdminAuthProvider");

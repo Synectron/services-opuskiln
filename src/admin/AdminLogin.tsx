@@ -6,7 +6,7 @@ import { useAdminAuth } from "./AdminAuth.tsx";
 export function AdminLogin() {
   const { user, setUser, loading } = useAdminAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("shubhammishrax@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
