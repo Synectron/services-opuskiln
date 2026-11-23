@@ -19,8 +19,7 @@ export function AdminShell() {
           </div>
           <nav className="flex flex-wrap gap-1">
             <NavLink
-              to="/admin"
-              end
+              to="/admin/orders"
               className={({ isActive }) =>
                 `rounded-full px-3 py-2 text-sm font-semibold ${isActive ? "bg-maroon text-[#fffaf3]" : "text-ink/80 hover:bg-white"}`
               }

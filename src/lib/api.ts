@@ -183,11 +183,39 @@ export function createOrder(body: {
   });
 }
 
+export type DayOrderStats = {
+  orderCount: number;
+  revenue: number;
+  newCount: number;
+  acceptedCount: number;
+  doneCount: number;
+  cancelledCount: number;
+};
+
+export type DaySummary = DayOrderStats & {
+  day: string;
+  isToday: boolean;
+};
+
+export type AdminOrdersPayload = {
+  day: string;
+  today: string;
+  prevDay: string;
+  nextDay: string;
+  isToday: boolean;
+  stats: DayOrderStats;
+  days: DaySummary[];
+  orders: ShopOrder[];
+  newCount: number;
+};
+
 export function fetchAdminOrders(params?: {
+  day?: string;
   status?: OrderStatus;
   limit?: number;
-}): Promise<{ orders: ShopOrder[]; newCount: number }> {
+}): Promise<AdminOrdersPayload> {
   const query = new URLSearchParams();
+  if (params?.day) query.set("day", params.day);
   if (params?.status) query.set("status", params.status);
   if (params?.limit) query.set("limit", String(params.limit));
   const suffix = query.size ? `?${query}` : "";

@@ -101,7 +101,9 @@ export default function App() {
         }
       >
         <Route element={<AdminShell />}>
-          <Route index element={<AdminOrders />} />
+          <Route index element={<Navigate to="/admin/orders" replace />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="orders/:day" element={<AdminOrders />} />
           <Route path="menu" element={<AdminMenu />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="admins" element={<AdminAdmins />} />

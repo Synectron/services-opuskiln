@@ -48,7 +48,7 @@ npm run build
 ## Owner admin
 
 - `/admin/login` — email / password
-- `/admin` — live orders board (polls every few seconds, optional ring on new orders)
+- `/admin/orders` — kitchen dashboard by day (IST); `/admin/orders/YYYY-MM-DD` for past days; polls + optional ring on new orders
 - `/admin/menu` — menu CRUD (add, edit prices, hide items)
 - `/admin/settings` — phone, WhatsApp, hours, free-delivery threshold, Zomato/Swiggy URLs
 - `/admin/admins` — super admin only: add staff, reset passwords, deactivate accounts
